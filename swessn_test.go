@@ -6,15 +6,15 @@ import (
 	"testing"
 	"time"
 
-	. "gopkg.in/go-playground/assert.v1"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestValidSSN(t *testing.T) {
 	y, _, _ := time.Now().Date()
 	ssn := New("640101-4136")
 
-	Equal(t, ssn.Valid(), true)
-	Equal(t, ssn.Age(), y-1964)
+	assert.Equal(t, true, ssn.Valid())
+	assert.Equal(t, y-1964, ssn.Age())
 
 	valid := map[string]string{
 		"8001013294":    "19800101-3294",
@@ -28,34 +28,35 @@ func TestValidSSN(t *testing.T) {
 		"158001013294":  "15800101-3294",
 		"21800101-3294": "21800101-3294",
 		"218001013294":  "21800101-3294",
+		"800161-3294":   "19800161-3294",
 	}
 
 	for in, expected := range valid {
-		Equal(t, New(in).String(), expected)
-		Equal(t, New(in).Valid(), true)
+		assert.Equal(t, expected, New(in).String())
+		assert.Equal(t, true, New(in).Valid())
 	}
 }
 
 func TestInvalidSSN(t *testing.T) {
 	badDate := New("880435-3300")
 
-	Equal(t, badDate.Formatted, "00000000-0001")
-	Equal(t, badDate.Valid(), false)
+	assert.Equal(t, "00000000-0001", badDate.Formatted)
+	assert.Equal(t, false, badDate.Valid())
 
 	badFormat := New("zeebra")
 
-	Equal(t, badFormat.String(), "00000000-0001")
-	Equal(t, badFormat.Age(), 0)
-	Equal(t, badFormat.IsOfAge(0), true)
+	assert.Equal(t, "00000000-0001", badFormat.String())
+	assert.Equal(t, 0, badFormat.Age())
+	assert.Equal(t, true, badFormat.IsOfAge(0))
 }
 
 func TestAge(t *testing.T) {
-	y, m, d := time.Now().Date()
-	canBuyAtSystembolaget := New(fmt.Sprintf("%04d%02d%02d-0000", y-20, m-1, d))
+	y, m, d := time.Now().AddDate(-20, -1, 0).Date()
+	canBuyAtSystembolaget := New(fmt.Sprintf("%04d%02d%02d-0000", y, m, d))
 
-	Equal(t, canBuyAtSystembolaget.Age(), 20)
-	Equal(t, canBuyAtSystembolaget.IsOfAge(20), true)
-	Equal(t, canBuyAtSystembolaget.IsOfAge(21), false)
+	assert.Equal(t, 20, canBuyAtSystembolaget.Age())
+	assert.Equal(t, true, canBuyAtSystembolaget.IsOfAge(20))
+	assert.Equal(t, false, canBuyAtSystembolaget.IsOfAge(21))
 
 }
 
@@ -68,8 +69,8 @@ func TestGenerate(t *testing.T) {
 	}
 
 	for expected, generated := range valid {
-		Equal(t, strings.HasPrefix(generated.String(), expected), true)
-		Equal(t, generated.Valid(), true)
+		assert.Equal(t, true, strings.HasPrefix(generated.String(), expected))
+		assert.Equal(t, true, generated.Valid())
 	}
 
 	invalid := map[string]*SSN{
@@ -78,14 +79,14 @@ func TestGenerate(t *testing.T) {
 	}
 
 	for expected, generated := range invalid {
-		Equal(t, strings.HasPrefix(generated.String(), expected), true)
-		Equal(t, generated.Valid(), false)
+		assert.Equal(t, true, strings.HasPrefix(generated.String(), expected))
+		assert.Equal(t, false, generated.Valid())
 	}
 
-	for _ = range make([]int, 100) {
+	for range make([]int, 100) {
 		ssn := GenerateAny()
 
-		Equal(t, ssn.Valid(), true)
-		Equal(t, ssn.Age() > 2, true)
+		assert.Equal(t, true, ssn.Valid())
+		assert.Equal(t, true, ssn.Age() > 2)
 	}
 }
