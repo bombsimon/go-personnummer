@@ -41,8 +41,8 @@ func New(ssn string) *SSN {
 
 func format(ssn string) string {
 	var (
-		extraReduce int       // Used to reduce 100 years if SSN contains '+' sign
-		plusAsByte  byte = 43 // Byte representation of the '+' sig
+		extraReduce int        // Used to reduce 100 years if SSN contains '+' sign
+		plusAsByte  byte = '+' // Byte representation of the '+' sig
 		ssnBytes         = []byte(ssn)
 	)
 
@@ -81,9 +81,13 @@ func format(ssn string) string {
 		}
 	}
 
-	// Make sure the date provided is valid with by parsing the time.
+	// remove co-ordination date for verification purposes.
+	day, _ := strconv.Atoi(string(ssnDate[6:8]))
+	noCoordinationSSNDate := []byte(fmt.Sprintf("%s%02d%s", ssnDate[:6], day%60, ssnDate[8:]))
+
+	// Make sure the ssn date without co-ordination number can be parsed into a valid date.
 	// Will support leap years and other handy things.
-	_, err := time.Parse("20060102", string(ssnDate))
+	_, err := time.Parse("20060102", string(noCoordinationSSNDate))
 	if err != nil {
 		return invalidSsn
 	}
@@ -116,11 +120,15 @@ func (s *SSN) IsOfAge(age int) bool {
 }
 
 // Valid returns a boolean value telling if the social security number is vlaid.
-// This is caluclated with Luhn algorithm to ensure the checksum of the last digit
+// This is calculated with Luhn algorithm to ensure the checksum of the last digit
 // in the social security number is valid.
 func (s *SSN) Valid() bool {
 	// Ommit all but 10 digits from the SSN
 	ssn := fmt.Sprintf("%s%s", s.Formatted[2:8], s.Formatted[9:13])
+
+	// Handle co-ordination numbers.
+	day, _ := strconv.Atoi(ssn[4:6])
+	ssn = fmt.Sprintf("%s%02d%s", ssn[:4], day%60, ssn[6:])
 
 	// Add the Luhn iteration sum to the last digit and ensure
 	// that we always get 0 rest from mod 10.
@@ -140,15 +148,15 @@ func calculateLuhnSum(ssn string) int {
 
 		// Multiply by two every second position in the SSN
 		if i%2 == 0 {
-			digit = digit * 2
+			digit *= 2
 		}
 
 		// Values above 10 is not allowed and must be reduced by 9
 		if digit > 9 {
-			digit = digit - 9
+			digit -= 9
 		}
 
-		sum = sum + digit
+		sum += digit
 	}
 
 	return sum
@@ -176,8 +184,8 @@ func Generate(y, m, d int, sex string) *SSN {
 
 	date := fmt.Sprintf("%04d%02d%02d", y, m, d)
 	sexIndications := map[string][]int{
-		"m": []int{1, 3, 5, 7, 9},
-		"f": []int{2, 4, 6, 8, 0},
+		"m": {1, 3, 5, 7, 9},
+		"f": {2, 4, 6, 8, 0},
 	}
 
 	randStart := rand.Intn(99)
