@@ -29,6 +29,8 @@ type Parsed struct {
 	Divider      Divider
 }
 
+// Parse will parse a string and returned a pointer to a Parsed type. If the
+// string passed isn't in a valid format an error will be returned.
 func Parse(input string) (*Parsed, error) {
 	validFormatRe := regexp.MustCompile(`^(\d{2})?(\d{2})(\d{2})(\d{2})([-+])?(\d{3})(\d)?$`)
 
@@ -75,6 +77,7 @@ func Parse(input string) (*Parsed, error) {
 	return p, nil
 }
 
+// LuhnCHecksum calculates the sum of the parsed digits with the Luhn algorithm.
 func (p *Parsed) LuhnChecksum() int {
 	var (
 		sum    = 0
@@ -101,6 +104,7 @@ func (p *Parsed) LuhnChecksum() int {
 	return sum
 }
 
+// LuhnControlDigit calculates the control digit based on a checksum.
 func (p *Parsed) LuhnControlDigit(cs int) int {
 	checksum := 10 - (cs % 10)
 
@@ -111,6 +115,8 @@ func (p *Parsed) LuhnControlDigit(cs int) int {
 	return checksum
 }
 
+// Valid returns if a parsed string is valid, that is if the given control digit
+// matches the checksum of the digits.
 func (p *Parsed) Valid() bool {
 	var (
 		controlDigit = p.LuhnControlDigit(p.LuhnChecksum())
@@ -124,6 +130,7 @@ func (p *Parsed) Valid() bool {
 	return controlDigit == cd
 }
 
+// StringFromInterface returns the string value from an interface.
 func StringFromInterface(input interface{}) string {
 	var nr string
 

@@ -33,6 +33,9 @@ type Person struct {
 	Gender         Gender
 }
 
+// NewPerson parses and returns a pointer to a Person based on the input. If the
+// input cannot be parsed an error will be returned. Upon creating a Person the
+// century, date and county will be set.
 func NewPerson(input string) (*Person, error) {
 	parsed, err := Parse(input)
 	if err != nil {
@@ -64,6 +67,7 @@ func NewPerson(input string) (*Person, error) {
 	return person, nil
 }
 
+// IsValidPersonalNumber returns if the parsed person string is valid.
 func IsValidPersonalNumber(input interface{}) bool {
 	nr := StringFromInterface(input)
 
@@ -75,20 +79,22 @@ func IsValidPersonalNumber(input interface{}) bool {
 	return person.Valid()
 }
 
-func (p *Person) String() string {
-	return fmt.Sprintf(
-		"%02d%02d%02d%s%03d%d",
-		p.Year, p.Month, p.Day,
-		p.Divider, p.Serial, p.ControlDigit,
-	)
-}
-
+// Valid returns if the parsed person string is valid.
 func (p *Person) Valid() bool {
 	if err := p.SetDate(); err != nil {
 		return false
 	}
 
 	return p.Parsed.Valid()
+}
+
+// String returns the string representation of a person.
+func (p *Person) String() string {
+	return fmt.Sprintf(
+		"%02d%02d%02d%s%03d%d",
+		p.Year, p.Month, p.Day,
+		p.Divider, p.Serial, p.ControlDigit,
+	)
 }
 
 // SetCentury will update the century for the person based on the input data if
@@ -167,6 +173,7 @@ func (p *Person) SetDate() error {
 	return nil
 }
 
+// SetCounty will set the count on the Person struct.
 func (p *Person) SetCounty() error {
 	if p.Century+p.Year > 1990 {
 		return nil
@@ -182,8 +189,8 @@ func (p *Person) SetCounty() error {
 	return nil
 }
 
-// Age returns the age of a person with a given SSN based on today's date
-// (UTC+0).
+// Age returns the age of a person with a given personal number based on today's
+// date (UTC+0).
 func (p *Person) Age() int {
 	if err := p.SetDate(); err != nil {
 		panic(err)
@@ -194,17 +201,18 @@ func (p *Person) Age() int {
 	return int(math.Floor(duration.Hours() / 24 / 365))
 }
 
-// IsOfAge checks if the age of a person with a given SSN is met.
+// IsOfAge checks if the age of a person with a given social security number has
+// been reached.
 func (p *Person) IsOfAge(age int) bool {
 	return p.Age() >= age
 }
 
-// Male returns true if the SSN serial number is uneven.
+// Male returns true if the social security number serial number is uneven.
 func (p *Person) Male() bool {
 	return p.Gender == Male
 }
 
-// Female returns true if the SSN serial number is even.
+// Female returns true if the social security number serial number is even.
 func (p *Person) Female() bool {
 	return p.Gender == Female
 }

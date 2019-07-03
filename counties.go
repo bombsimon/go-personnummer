@@ -4,6 +4,11 @@ import (
 	"errors"
 )
 
+// County represents the counties within Sweden. This could be told from the
+// serial number before 1990. See
+// https://en.wikipedia.org/wiki/Personal_identity_number_(Sweden)#Format
+// The naming and values of the counties is an ISO 3166-2 standard. See
+// https://en.wikipedia.org/wiki/Counties_of_Sweden#Map
 type County int
 
 const (
@@ -98,6 +103,9 @@ func (c County) String() string {
 	return ""
 }
 
+// CountyFromSerial will calculate the appropriate county based on a serial
+// number. The source for these values may be found here:
+// https://sv.wikipedia.org/wiki/Personnummer_i_Sverige#F%C3%B6delsenumret
 func CountyFromSerial(serial int) (County, error) {
 	switch s := serial; {
 	case s < 139:

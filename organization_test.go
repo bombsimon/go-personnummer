@@ -21,7 +21,7 @@ func TestIsValidOrganisation(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(fmt.Sprintf("%s is %v", tc.organizationNumber, tc.valid), func(t *testing.T) {
-			valid := IsValidOrganisation(tc.organizationNumber)
+			valid := IsValidOrganization(tc.organizationNumber)
 
 			assert.Equal(t, tc.valid, valid)
 		})
