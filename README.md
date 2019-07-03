@@ -81,6 +81,22 @@ if !IsValidOrganisation() {
 }
 ```
 
+If you want to skip parsing multiple times you can construct types from a parsed
+type.
+
+```go
+parsed, err := Parse("800101-3294")
+if err != nil {
+	panic("no?")
+}
+
+person, _ := NewPersonFromParsed(parsed)
+org, _ := NewOrganizationFromParsed(parsed)
+
+// Any valid goes!
+return person.Valid() || org.Valid()
+```
+
 ## Generation
 
 In addition to validation this package also provide support to generate social

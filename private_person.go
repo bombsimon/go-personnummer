@@ -42,6 +42,13 @@ func NewPerson(input string) (*Person, error) {
 		return nil, err
 	}
 
+	return NewPersonFromParsed(parsed)
+}
+
+// NewPersonFromParsed returns a new person from a Parsed type. This may be used
+// to skip parsing multiple times if a string should be tested as Parsed,
+// Organization or Person.
+func NewPersonFromParsed(parsed *Parsed) (*Person, error) {
 	person := &Person{
 		Parsed: parsed,
 		Gender: GenderFromSerial(parsed.Serial),
