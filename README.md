@@ -76,8 +76,8 @@ if person.Female() && person.IsOfAge(16) {
 The interface to validate organizations is the same.
 
 ```go
-if !IsValidOrganisation() {
-	return NoGo("556703-7485")
+if !IsValidOrganisation("556703-7485") {
+	return NoGo()
 }
 ```
 
