@@ -1,13 +1,15 @@
+---
 language: go
-go:
-  - "1.10"
 
-install:
-  - go get -v github.com/golang/dep/cmd/dep
-  - dep ensure -v -vendor-only
+go:
+  - "1.12"
+
+env:
+  global:
+    - GO111MODULE=on
 
 script:
-  - go test -v -coverprofile c.out ./...
+  - go test -race -v -coverprofile c.out ./...
 
 notifications:
   email: false
