@@ -1,26 +1,31 @@
 package swessn
 
-type Organisation struct {
+// Organization represents a parsed string to be used in the context of an
+// organization.
+type Organization struct {
 	*Parsed
 }
 
-func NewOrganisation(input string) (*Organisation, error) {
+// NewOrganization parses and returns a pointer to an Organization based on the
+// input. If the input cannot be parsed an error will be returned.
+func NewOrganization(input string) (*Organization, error) {
 	parsed, err := Parse(input)
 	if err != nil {
 		return nil, err
 	}
 
-	organisation := &Organisation{
+	organisation := &Organization{
 		Parsed: parsed,
 	}
 
 	return organisation, nil
 }
 
-func IsValidOrganisation(input interface{}) bool {
+// IsValidOrganization returns if the parsed organization string is valid.
+func IsValidOrganization(input interface{}) bool {
 	nr := StringFromInterface(input)
 
-	org, err := NewOrganisation(nr)
+	org, err := NewOrganization(nr)
 	if err != nil {
 		return false
 	}
@@ -28,7 +33,8 @@ func IsValidOrganisation(input interface{}) bool {
 	return org.Valid()
 }
 
-func (o *Organisation) Valid() bool {
+// Valid returns if the parsed organization string is valid.
+func (o *Organization) Valid() bool {
 	if o.Month < 20 {
 		return false
 	}
