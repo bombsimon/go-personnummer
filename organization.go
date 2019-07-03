@@ -14,6 +14,13 @@ func NewOrganization(input string) (*Organization, error) {
 		return nil, err
 	}
 
+	return NewOrganizationFromParsed(parsed)
+}
+
+// NewOrganizationFromParsed returns a new organization from a Parsed type. This
+// may be used to skip parsing multiple times if a string should be tested as
+// Parsed, Organization or Person.
+func NewOrganizationFromParsed(parsed *Parsed) (*Organization, error) {
 	organisation := &Organization{
 		Parsed: parsed,
 	}
