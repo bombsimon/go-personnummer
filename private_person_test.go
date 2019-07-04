@@ -201,7 +201,7 @@ func TestIsValidPersonalNumber(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(fmt.Sprintf("%s is %v", tc.pnr, tc.valid), func(t *testing.T) {
-			valid := IsValidPersonalNumber(tc.pnr)
+			valid := IsValidPerson(tc.pnr)
 
 			assert.Equal(t, tc.valid, valid)
 		})

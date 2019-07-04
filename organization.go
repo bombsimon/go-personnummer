@@ -37,6 +37,10 @@ func IsValidOrganization(input interface{}) bool {
 		return false
 	}
 
+	if org.Divider == DividerPlus {
+		return false
+	}
+
 	return org.Valid()
 }
 
