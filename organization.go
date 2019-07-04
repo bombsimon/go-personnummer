@@ -42,6 +42,11 @@ func IsValidOrganization(input interface{}) bool {
 
 // Valid returns if the parsed organization string is valid.
 func (o *Organization) Valid() bool {
+	// May only be prefixed with 16.
+	if o.Century != 0 && o.Century != 1600 {
+		return false
+	}
+
 	// Third digit ("month") must be >= 2
 	if o.Month < 20 {
 		return false
