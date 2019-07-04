@@ -37,16 +37,23 @@ func IsValidOrganization(input interface{}) bool {
 		return false
 	}
 
-	if org.Divider == DividerPlus {
-		return false
-	}
-
 	return org.Valid()
 }
 
 // Valid returns if the parsed organization string is valid.
 func (o *Organization) Valid() bool {
+	// Third digit ("month") must be >= 2
 	if o.Month < 20 {
+		return false
+	}
+
+	// Organization numbers may never be divided with `+`.
+	if o.Divider == DividerPlus {
+		return false
+	}
+
+	// May never start with leading 0.
+	if o.Year < 10 {
 		return false
 	}
 

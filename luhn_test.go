@@ -152,10 +152,16 @@ func TestParsed_Valid(t *testing.T) {
 			validPnr:    false,
 			validOrg:    true,
 		},
+		{
+			description: "valid luhn but not valid personal or organization number",
+			input:       "056703-7486",
+			validPnr:    false,
+			validOrg:    false,
+		},
 	}
 
 	for _, tc := range cases {
-		t.Run(fmt.Sprintf("input %s", tc.input), func(t *testing.T) {
+		t.Run(tc.description, func(t *testing.T) {
 			parsed, err := Parse(tc.input)
 
 			if tc.invalidFormat {

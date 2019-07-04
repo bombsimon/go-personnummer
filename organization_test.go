@@ -15,6 +15,7 @@ func TestIsValidOrganisation(t *testing.T) {
 		{organizationNumber: "556703-7485", valid: true},
 		{organizationNumber: "556074-7569", valid: true},
 		{organizationNumber: "252002-6135", valid: true},
+		{organizationNumber: "056703-7486", valid: false},
 		{organizationNumber: "8001013294", valid: false},
 		{organizationNumber: "556703+7485", valid: false},
 		{organizationNumber: "😸", valid: false},
