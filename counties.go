@@ -42,7 +42,7 @@ const (
 	CountyQQ
 )
 
-// Region returns the name of the region where the person was born, if born
+// String returns the name of the region where the person was born, if born
 // before 1990 when this system was removed.
 func (c County) String() string {
 	switch c {

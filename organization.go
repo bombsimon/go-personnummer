@@ -1,9 +1,58 @@
 package swessn
 
+// CorporateForm indicates what form the company is of. This could be told by
+// reading the first digit in the organization number. This is not 100%
+// guaranteed to be correct according to Bolagsverket and Bolagsverket is also a
+// source that doesn't list all of these types.
+// See the following sources for information:
+// https://bolagsverket.se/ff/foretagsformer/organisationsnummer-1.7902
+// https://www.solidinfo.se/hjalp/organisationsnummer
+// https://www.ageras.se/ordlista/organisationsnummer
+// https://sv.wikipedia.org/wiki/Organisationsnummer#Organisationsnummer
+type CorporateForm int
+
+const (
+	CorporateFormEstate CorporateForm = iota + 1
+	CorporateFormStateCCMunicipalities
+	CorporateFormForeign
+	CorporateFormUnknown
+	CorporateFormLimitedCompany
+	CorporateFormSimpleCompany
+	CorporateFormEconomicTenantAssociation
+	CorporateFormIdealFoundation
+	CorporateFormTradingPartnershipSimple
+)
+
+func (cf CorporateForm) String() string {
+	switch cf {
+	case CorporateFormEstate:
+		return "Dödsbo"
+	case CorporateFormStateCCMunicipalities:
+		return "Stat, landsting, kommun, församling"
+	case CorporateFormForeign:
+		return "Utländska företag som bedriver näringsverksamhet eller äger fastigheter i Sverige"
+	case CorporateFormUnknown:
+		return "Okänt"
+	case CorporateFormLimitedCompany:
+		return "Aktiebolag"
+	case CorporateFormSimpleCompany:
+		return "Enkelt bolag"
+	case CorporateFormEconomicTenantAssociation:
+		return "Ekonomisk förening, bostadsrättsförening"
+	case CorporateFormIdealFoundation:
+		return "Ideell förening och stiftelse"
+	case CorporateFormTradingPartnershipSimple:
+		return "Handelsbolag, kommanditbolag och enkelt bolag"
+	}
+
+	return "Okänt"
+}
+
 // Organization represents a parsed string to be used in the context of an
 // organization.
 type Organization struct {
 	*Parsed
+	CorporateForm CorporateForm
 }
 
 // NewOrganization parses and returns a pointer to an Organization based on the
@@ -22,7 +71,8 @@ func NewOrganization(input string) (*Organization, error) {
 // Parsed, Organization or Person.
 func NewOrganizationFromParsed(parsed *Parsed) (*Organization, error) {
 	organisation := &Organization{
-		Parsed: parsed,
+		Parsed:        parsed,
+		CorporateForm: CorporateForm(parsed.Year / 10),
 	}
 
 	return organisation, nil
