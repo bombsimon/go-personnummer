@@ -1,6 +1,7 @@
 # Swedish Identification Numbers
 
-[![Build Status](https://travis-ci.org/bombsimon/swedish-ssn.svg?branch=master)](https://travis-ci.org/bombsimon/swedish-ssn)
+[![Build
+Status](https://travis-ci.org/bombsimon/swedish-ssn.svg?branch=master)](https://travis-ci.org/bombsimon/swedish-ssn)
 [![GoDoc](https://godoc.org/github.com/bombsimon/swedish-ssn?status.svg)](https://godoc.org/github.com/bombsimon/swedish-ssn)
 
 This package aims to provide a toolbox to handle Swedish identification numbers
@@ -11,7 +12,8 @@ exceptions to the coordination number.
 
 In addition to the correct checksum calculated with the Luhn algorithm, the following rules applies:
 
-* Digit between digits and control numbers may only be divided with `-`, or `+`
+* Divider between digits and control numbers may only be divided with `-`, or
+  `+`
 * A social security number must be a valid date
 * An organization numbers third digit must be >= 2
 * A coordination number must have a date where day value is > 60
@@ -24,7 +26,7 @@ person. The `Person` type holds and implements a few of these things.
 * `IsCoordination` tells if the person has a coordination number
 * `Date` is a `time.Time` type with the birth date
 * `County` holds the county code for people born before 1990
-* `Gender` holds wether the person was born `Male` or `Female`
+* `Gender` holds whether the person is a `Male` or `Female`
 * `Age()` can tell the persons age (in UTC timezone)
 * `IsOfAge(n int)` can tell if the person is `n` (or above)
 * `Male()` is true if it's a `Male`
@@ -95,6 +97,9 @@ org, _ := NewOrganizationFromParsed(parsed)
 
 // Any valid goes!
 return person.Valid() || org.Valid()
+
+// Perform the validation without keeping the types and only parse once.
+return parsed.ValidPerson() || parsed.ValidOrganization()
 ```
 
 ## Generation

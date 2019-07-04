@@ -130,6 +130,28 @@ func (p *Parsed) Valid() bool {
 	return controlDigit == cd
 }
 
+// ValidPerson returns if a parsed string is valid if validated as a private
+// person.
+func (p *Parsed) ValidPerson() bool {
+	person, err := NewPersonFromParsed(p)
+	if err != nil {
+		return false
+	}
+
+	return person.Valid()
+}
+
+// ValidOrganization returns if a parsed string is valid if validated as an
+// organization.
+func (p *Parsed) ValidOrganization() bool {
+	org, err := NewOrganizationFromParsed(p)
+	if err != nil {
+		return false
+	}
+
+	return org.Valid()
+}
+
 // StringFromInterface returns the string value from an interface.
 func StringFromInterface(input interface{}) string {
 	var nr string

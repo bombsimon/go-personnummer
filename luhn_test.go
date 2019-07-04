@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestParse(t *testing.T) {
@@ -84,6 +85,89 @@ func TestParse(t *testing.T) {
 			}
 
 			assert.Equal(t, tc.output, result)
+		})
+	}
+}
+
+func TestParsed_Valid(t *testing.T) {
+	cases := []struct {
+		description   string
+		input         string
+		invalidFormat bool
+		validPnr      bool
+		validOrg      bool
+	}{
+		{
+			description:   "invalid input",
+			input:         "😸",
+			invalidFormat: true,
+			validPnr:      false,
+			validOrg:      false,
+		},
+		{
+			description: "invalid input",
+			input:       "000000-0000",
+			validPnr:    false,
+			validOrg:    false,
+		},
+		{
+			description: "invalid input",
+			input:       "000000-0001",
+			validPnr:    false,
+			validOrg:    false,
+		},
+		{
+			description: "regular personal number last century",
+			input:       "8001013294",
+			validPnr:    true,
+			validOrg:    false,
+		},
+		{
+			description: "regular personal this century",
+			input:       "090314-6603",
+			validPnr:    true,
+			validOrg:    false,
+		},
+		{
+			description: "regular personal in the future",
+			input:       "21800101-3294",
+			validPnr:    true,
+			validOrg:    false,
+		},
+		{
+			description: "regular personal with + sign",
+			input:       "800101+3294",
+			validPnr:    true,
+			validOrg:    false,
+		},
+		{
+			description: "valid organization number",
+			input:       "556703-7485",
+			validPnr:    false,
+			validOrg:    true,
+		},
+		{
+			description: "valid organization number other form",
+			input:       "252002-6135",
+			validPnr:    false,
+			validOrg:    true,
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(fmt.Sprintf("input %s", tc.input), func(t *testing.T) {
+			parsed, err := Parse(tc.input)
+
+			if tc.invalidFormat {
+				require.Error(t, err)
+
+				return
+			}
+
+			require.NoError(t, err)
+
+			assert.Equal(t, tc.validPnr, parsed.ValidPerson())
+			assert.Equal(t, tc.validOrg, parsed.ValidOrganization())
 		})
 	}
 }
