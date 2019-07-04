@@ -29,11 +29,12 @@ type Parsed struct {
 	Divider      Divider
 }
 
+// nolint: gochecknoglobal
+var validFormatRe = regexp.MustCompile(`^(\d{2})?(\d{2})(\d{2})(\d{2})([-+])?(\d{3})(\d)?$`)
+
 // Parse will parse a string and returned a pointer to a Parsed type. If the
 // string passed isn't in a valid format an error will be returned.
 func Parse(input string) (*Parsed, error) {
-	validFormatRe := regexp.MustCompile(`^(\d{2})?(\d{2})(\d{2})(\d{2})([-+])?(\d{3})(\d)?$`)
-
 	matches := validFormatRe.FindStringSubmatch(input)
 
 	if len(matches) != 8 {

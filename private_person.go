@@ -55,7 +55,7 @@ func NewPersonFromParsed(parsed *Parsed) (*Person, error) {
 	}
 
 	if person.Day > minCoordinationNumber {
-		person.Day = person.Day % 60
+		person.Day %= 60
 		person.IsCoordination = true
 	}
 
@@ -203,7 +203,7 @@ func (p *Person) Age() int {
 		panic(err)
 	}
 
-	duration := time.Now().Sub(p.Date)
+	duration := time.Since(p.Date)
 
 	return int(math.Floor(duration.Hours() / 24 / 365))
 }

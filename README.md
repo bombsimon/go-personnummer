@@ -18,10 +18,14 @@ In addition to the correct checksum calculated with the Luhn algorithm, the foll
 * An organization numbers third digit must be >= 2
 * A coordination number must have a date where day value is > 60
 
-## Extra data (private person)
+## Extra data
 
 Some extra data may be extracted from a social security number regarding the
-person. The `Person` type holds and implements a few of these things.
+person or the organization number regarding companies. 
+
+### Private person
+
+The `Person` type holds and implements these things.
 
 * `IsCoordination` tells if the person has a coordination number
 * `Date` is a `time.Time` type with the birth date
@@ -31,6 +35,12 @@ person. The `Person` type holds and implements a few of these things.
 * `IsOfAge(n int)` can tell if the person is `n` (or above)
 * `Male()` is true if it's a `Male`
 * `Female()` is true if it's a `Female`
+
+### Organization
+
+The `Organization` type holds and implements these things.
+
+* `CompanyForm` hods the guessed form for the company
 
 ## Validation
 
