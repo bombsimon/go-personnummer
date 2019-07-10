@@ -23,6 +23,24 @@ const (
 	Female
 )
 
+// Zodiac represents the zodiac sign, also known as astrological sign.
+type Zodiac int
+
+const (
+	Aries Zodiac = iota
+	Taurus
+	Gemini
+	Cancer
+	Leo
+	Virgo
+	Libra
+	Scorpio
+	Sagittarius
+	Capricorn
+	Aquarius
+	Pisces
+)
+
 // Person represents what can be told about a person based on the social
 // security number.
 type Person struct {
@@ -31,6 +49,7 @@ type Person struct {
 	IsCoordination bool
 	County         County
 	Gender         Gender
+	Zodiac         Zodiac
 }
 
 // NewPerson parses and returns a pointer to a Person based on the input. If the
@@ -67,6 +86,10 @@ func NewPersonFromParsed(parsed *Parsed) (*Person, error) {
 		return nil, err
 	}
 
+	if err := person.SetZodiac(); err != nil {
+		return nil, err
+	}
+
 	if err := person.SetCounty(); err != nil {
 		return nil, err
 	}
@@ -97,10 +120,15 @@ func (p *Person) Valid() bool {
 
 // String returns the string representation of a person.
 func (p *Person) String() string {
+	cd := 0
+	if p.ControlDigit != nil {
+		cd = *p.ControlDigit
+	}
+
 	return fmt.Sprintf(
 		"%02d%02d%02d%s%03d%d",
 		p.Year, p.Month, p.Day,
-		p.Divider, p.Serial, p.ControlDigit,
+		p.Divider, p.Serial, cd,
 	)
 }
 
@@ -180,9 +208,22 @@ func (p *Person) SetDate() error {
 	return nil
 }
 
+// SetZodiac will set the zodiac sign on the Person struct.
+func (p *Person) SetZodiac() error {
+	if err := p.SetDate(); err != nil {
+		return err
+	}
+
+	p.Zodiac = ZodiacFromDate(p.Date)
+
+	return nil
+}
+
 // SetCounty will set the count on the Person struct.
 func (p *Person) SetCounty() error {
 	if p.Century+p.Year > 1990 {
+		p.County = CountyUnknown
+
 		return nil
 	}
 
@@ -232,6 +273,53 @@ func GenderFromSerial(serial int) Gender {
 	}
 
 	return Male
+}
+
+// ZodiacFromDate will return the zodiac sign based on the date (month and day).
+// See dates https://en.wikipedia.org/wiki/Astrological_sign#Dates_table
+func ZodiacFromDate(d time.Time) Zodiac {
+	parse := func(ds string) time.Time {
+		t, err := time.Parse("2006-01-02", fmt.Sprintf("%d-%s", d.Year(), ds))
+		if err != nil {
+			panic(err)
+		}
+
+		return t
+	}
+
+	parseOffset := func(ds string, offset int) time.Time {
+		t := parse(ds).AddDate(offset, 0, 0)
+		return t
+	}
+
+	switch {
+	case d.After(parse("03-20")) && d.Before(parse("04-20")):
+		return Aries
+	case d.After(parse("04-19")) && d.Before(parse("05-21")):
+		return Taurus
+	case d.After(parse("05-20")) && d.Before(parse("06-21")):
+		return Gemini
+	case d.After(parse("06-20")) && d.Before(parse("07-21")):
+		return Cancer
+	case d.After(parse("07-22")) && d.Before(parse("08-23")):
+		return Leo
+	case d.After(parse("08-22")) && d.Before(parse("09-23")):
+		return Virgo
+	case d.After(parse("09-22")) && d.Before(parse("10-23")):
+		return Libra
+	case d.After(parse("10-22")) && d.Before(parse("11-22")):
+		return Scorpio
+	case d.After(parse("11-21")) && d.Before(parse("12-22")):
+		return Sagittarius
+	case d.After(parseOffset("12-20", -1)) && d.Before(parse("01-20")):
+		return Capricorn
+	case d.After(parse("01-19")) && d.Before(parse("02-19")):
+		return Aquarius
+	case d.After(parse("02-18")) && d.Before(parse("03-21")):
+		return Pisces
+	}
+
+	return Zodiac(-1)
 }
 
 // Generate will generate a valid Swedish social security number

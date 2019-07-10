@@ -49,6 +49,7 @@ func TestNewPerson(t *testing.T) {
 				IsCoordination: false,
 				County:         CountyK,
 				Gender:         Male,
+				Zodiac:         Capricorn,
 			},
 		},
 		{
@@ -65,8 +66,9 @@ func TestNewPerson(t *testing.T) {
 					Divider:      DividerMinus,
 				},
 				IsCoordination: false,
-				County:         CountyA,
+				County:         CountyUnknown,
 				Gender:         Female,
+				Zodiac:         Pisces,
 			},
 		},
 		{
@@ -85,6 +87,7 @@ func TestNewPerson(t *testing.T) {
 				IsCoordination: false,
 				County:         CountyT,
 				Gender:         Female,
+				Zodiac:         Pisces,
 			},
 		},
 		{
@@ -104,6 +107,7 @@ func TestNewPerson(t *testing.T) {
 				IsCoordination: false,
 				County:         CountyK,
 				Gender:         Male,
+				Zodiac:         Capricorn,
 			},
 		},
 		{
@@ -122,6 +126,7 @@ func TestNewPerson(t *testing.T) {
 				IsCoordination: false,
 				County:         CountyK,
 				Gender:         Male,
+				Zodiac:         Capricorn,
 			},
 		},
 		{
@@ -140,6 +145,25 @@ func TestNewPerson(t *testing.T) {
 				IsCoordination: true,
 				County:         CountyK,
 				Gender:         Male,
+				Zodiac:         Capricorn,
+			},
+		},
+		{
+			description: "valid with aries zodiac",
+			input:       "980401-9033",
+			output: &Person{
+				Parsed: &Parsed{
+					Century:      1900,
+					Year:         98,
+					Month:        4,
+					Day:          1,
+					Serial:       903,
+					ControlDigit: &three,
+					Divider:      DividerMinus,
+				},
+				County: CountyUnknown,
+				Gender: Male,
+				Zodiac: Aries,
 			},
 		},
 	}
@@ -166,6 +190,8 @@ func TestNewPerson(t *testing.T) {
 			if !tc.output.Date.IsZero() {
 				assert.Equal(t, tc.output.Date, result.Date)
 			}
+
+			assert.Equal(t, tc.output.Zodiac, result.Zodiac)
 
 			switch tc.output.Gender {
 			case Male:

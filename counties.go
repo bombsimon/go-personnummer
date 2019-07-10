@@ -40,6 +40,7 @@ const (
 	CountyBD
 	CountyQ
 	CountyQQ
+	CountyUnknown
 )
 
 // String returns the name of the region where the person was born, if born
@@ -98,6 +99,8 @@ func (c County) String() string {
 		return "Norrbottens län"
 	case CountyQQ:
 		return "Outside Sweden or non Swedish citizen"
+	case CountyUnknown:
+		return "Unknown"
 	}
 
 	return ""
