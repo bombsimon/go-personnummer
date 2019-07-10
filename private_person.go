@@ -76,7 +76,7 @@ func NewPersonFromParsed(parsed *Parsed) (*Person, error) {
 
 // IsValidPerson returns if the parsed person string is valid.
 func IsValidPerson(input interface{}) bool {
-	nr := StringFromInterface(input)
+	nr := stringFromInterface(input)
 
 	person, err := NewPerson(nr)
 	if err != nil {

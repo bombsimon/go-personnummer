@@ -80,7 +80,7 @@ func NewOrganizationFromParsed(parsed *Parsed) (*Organization, error) {
 
 // IsValidOrganization returns if the parsed organization string is valid.
 func IsValidOrganization(input interface{}) bool {
-	nr := StringFromInterface(input)
+	nr := stringFromInterface(input)
 
 	org, err := NewOrganization(nr)
 	if err != nil {

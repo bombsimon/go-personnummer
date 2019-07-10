@@ -62,11 +62,11 @@ strings, integers and floats of the most common types.
 
 ```go
 // I just care for validation
-if IsValidPersonalNumber("800101-3294") {
+if IsValidPerson("800101-3294") {
 	return RealFood()
 }
 
-if !IsValidPersonalNumber(800101329) {
+if !IsValidPerson(800101329) {
 	return MaybeMetal()
 }
 
@@ -88,7 +88,7 @@ if person.Female() && person.IsOfAge(16) {
 The interface to validate organizations is the same.
 
 ```go
-if !IsValidOrganisation("556703-7485") {
+if !IsValidOrganization("556703-7485") {
 	return NoGo()
 }
 ```

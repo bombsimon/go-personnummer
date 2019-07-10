@@ -177,7 +177,7 @@ func TestNewPerson(t *testing.T) {
 	}
 }
 
-func TestIsValidPersonalNumber(t *testing.T) {
+func TestIsValidPerson(t *testing.T) {
 	cases := []struct {
 		pnr   string
 		valid bool

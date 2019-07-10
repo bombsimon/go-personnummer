@@ -219,7 +219,7 @@ func TestStringFromInterface(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(fmt.Sprintf("input %s", tc.input), func(t *testing.T) {
-			str := StringFromInterface(tc.input)
+			str := stringFromInterface(tc.input)
 
 			assert.Equal(t, tc.output, str)
 		})

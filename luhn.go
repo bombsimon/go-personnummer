@@ -153,8 +153,8 @@ func (p *Parsed) ValidOrganization() bool {
 	return org.Valid()
 }
 
-// StringFromInterface returns the string value from an interface.
-func StringFromInterface(input interface{}) string {
+// stringFromInterface returns the string value from an interface.
+func stringFromInterface(input interface{}) string {
 	var nr string
 
 	switch v := input.(type) {
