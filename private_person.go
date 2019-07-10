@@ -322,6 +322,37 @@ func ZodiacFromDate(d time.Time) Zodiac {
 	return Zodiac(-1)
 }
 
+func (z Zodiac) String() string {
+	switch z {
+	case Aries:
+		return "Aries"
+	case Taurus:
+		return "Taurus"
+	case Gemini:
+		return "Gemini"
+	case Cancer:
+		return "Cancer"
+	case Leo:
+		return "Leo"
+	case Virgo:
+		return "Virgo"
+	case Libra:
+		return "Libra"
+	case Scorpio:
+		return "Scorpio"
+	case Sagittarius:
+		return "Sagittarius"
+	case Capricorn:
+		return "Capricorn"
+	case Aquarius:
+		return "Aquarius"
+	case Pisces:
+		return "Pisces"
+	}
+
+	return "Unknown"
+}
+
 // Generate will generate a valid Swedish social security number
 // based on passed year, month, day and sex.
 func Generate(date time.Time, sex Gender) (*Person, error) {

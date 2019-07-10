@@ -244,3 +244,40 @@ func TestPerson_Age(t *testing.T) {
 	assert.Equal(t, true, personWhoCanBuyAtSystembolaget.IsOfAge(20))
 	assert.Equal(t, false, personWhoCanBuyAtSystembolaget.IsOfAge(21))
 }
+
+func TestZodiacFromDate(t *testing.T) {
+	cases := []struct {
+		description          string
+		date                 time.Time
+		expectedZodiac       Zodiac
+		expectedZodiacString string
+	}{
+		{
+			description:          "crossing year",
+			date:                 time.Date(1990, 1, 1, 0, 0, 0, 0, time.UTC),
+			expectedZodiac:       Capricorn,
+			expectedZodiacString: "Capricorn",
+		},
+		{
+			description:          "middle of the year",
+			date:                 time.Date(1990, 4, 1, 0, 0, 0, 0, time.UTC),
+			expectedZodiac:       Aries,
+			expectedZodiacString: "Aries",
+		},
+		{
+			description:          "leap year",
+			date:                 time.Date(2016, 2, 29, 0, 0, 0, 0, time.UTC),
+			expectedZodiac:       Pisces,
+			expectedZodiacString: "Pisces",
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.description, func(t *testing.T) {
+			z := ZodiacFromDate(tc.date)
+
+			assert.Equal(t, tc.expectedZodiac, z)
+			assert.Equal(t, tc.expectedZodiacString, z.String())
+		})
+	}
+}
