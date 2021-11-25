@@ -1,4 +1,4 @@
-module github.com/bombsimon/swedish-ssn
+module github.com/bombsimon/go-personnummer
 
 go 1.12
 
