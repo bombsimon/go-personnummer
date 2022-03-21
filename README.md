@@ -1,8 +1,7 @@
 # Swedish Identification Numbers
 
-[![Build
-Status](https://travis-ci.org/bombsimon/swedish-ssn.svg?branch=master)](https://travis-ci.org/bombsimon/swedish-ssn)
-[![GoDoc](https://godoc.org/github.com/bombsimon/swedish-ssn?status.svg)](https://godoc.org/github.com/bombsimon/swedish-ssn)
+[![Build](https://github.com/bombsimon/go-personnummer/actions/workflows/go.yml/badge.svg)](https://github.com/bombsimon/go-personnummer/actions/workflows/go.yml)
+[![GoDoc](https://godoc.org/github.com/bombsimon/go-personnummer?status.svg)](https://godoc.org/github.com/bombsimon/go-personnummer)
 
 This package aims to provide a toolbox to handle Swedish identification numbers
 of three different types; social security numbers (or personal numbers),
