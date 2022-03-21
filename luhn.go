@@ -20,13 +20,14 @@ const (
 // Parsed represents a parsed string. The fields are named as date parts but may
 // be of other types in case of an organisation number or coordination number.
 type Parsed struct {
-	Century      int
-	Year         int
-	Month        int
-	Day          int
-	Serial       int
-	ControlDigit *int
-	Divider      Divider
+	Century        int
+	Year           int
+	Month          int
+	Day            int
+	Serial         int
+	ControlDigit   *int
+	Divider        Divider
+	IsCoordination bool
 }
 
 // nolint: gochecknoglobal
@@ -81,9 +82,15 @@ func Parse(input string) (*Parsed, error) {
 // LuhnCHecksum calculates the sum of the parsed digits with the Luhn algorithm.
 func (p *Parsed) LuhnChecksum() int {
 	var (
-		sum    = 0
-		digits = fmt.Sprintf("%02d%02d%02d%03d", p.Year, p.Month, p.Day, p.Serial)
+		sum = 0
+		day = p.Day
 	)
+
+	if p.IsCoordination {
+		day = p.Day + 60
+	}
+
+	digits := fmt.Sprintf("%02d%02d%02d%03d", p.Year, p.Month, day, p.Serial)
 
 	for i := range digits {
 		digit, err := strconv.Atoi(string(digits[i]))

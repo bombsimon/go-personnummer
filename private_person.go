@@ -45,11 +45,10 @@ const (
 // security number.
 type Person struct {
 	*Parsed
-	Date           time.Time
-	IsCoordination bool
-	County         County
-	Gender         Gender
-	Zodiac         Zodiac
+	Date   time.Time
+	County County
+	Gender Gender
+	Zodiac Zodiac
 }
 
 // NewPerson parses and returns a pointer to a Person based on the input. If the
