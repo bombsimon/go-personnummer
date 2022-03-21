@@ -1,4 +1,4 @@
-package swessn
+package personnummer
 
 // CorporateForm indicates what form the company is of. This could be told by
 // reading the first digit in the organization number. This is not 100%
