@@ -52,6 +52,12 @@ type Person struct {
 	Zodiac         Zodiac
 }
 
+// GetDay will return the day as a valid date day, meaning it's the parsed
+// personal identity number but witout a potential coordination number.
+func (p *Person) GetDay() int {
+	return p.Day % minCoordinationNumber
+}
+
 // NewPerson parses and returns a pointer to a Person based on the input. If the
 // input cannot be parsed an error will be returned. Upon creating a Person the
 // century, date and county will be set.
@@ -74,7 +80,6 @@ func NewPersonFromParsed(parsed *Parsed) (*Person, error) {
 	}
 
 	if person.Day > minCoordinationNumber {
-		person.Day %= 60
 		person.IsCoordination = true
 	}
 
@@ -127,7 +132,7 @@ func (p *Person) String() string {
 
 	return fmt.Sprintf(
 		"%02d%02d%02d%s%03d%d",
-		p.Year, p.Month, p.Day,
+		p.Year, p.Month, p.GetDay(),
 		p.Divider, p.Serial, cd,
 	)
 }
@@ -154,7 +159,7 @@ func (p *Person) SetCentury() error {
 		"2006-01-02",
 		fmt.Sprintf(
 			"%02d%02d-%02d-%02d",
-			time.Now().Year()/100, p.Year, p.Month, p.Day,
+			time.Now().Year()/100, p.Year, p.Month, p.GetDay(),
 		),
 	)
 
@@ -195,7 +200,7 @@ func (p *Person) SetDate() error {
 			"%d-%02d-%02d",
 			p.Century+p.Year,
 			p.Month,
-			p.Day,
+			p.GetDay(),
 		),
 	)
 

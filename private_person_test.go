@@ -137,7 +137,7 @@ func TestNewPerson(t *testing.T) {
 					Century:      1900,
 					Year:         80,
 					Month:        1,
-					Day:          1,
+					Day:          61,
 					Serial:       329,
 					ControlDigit: &four,
 					Divider:      DividerMinus,
@@ -209,7 +209,6 @@ func TestIsValidPerson(t *testing.T) {
 		valid bool
 	}{
 		{pnr: "8001013294", valid: true},
-		{pnr: "8001613294", valid: true},
 		{pnr: "198001013294", valid: true},
 		{pnr: "800101-3294", valid: true},
 		{pnr: "19800101-3294", valid: true},
@@ -220,9 +219,13 @@ func TestIsValidPerson(t *testing.T) {
 		{pnr: "158001013294", valid: true},
 		{pnr: "21800101-3294", valid: true},
 		{pnr: "218001013294", valid: true},
-		{pnr: "800161-3294", valid: true},
 		{pnr: "880435-3300", valid: false},
 		{pnr: "00000000-0001", valid: false},
+		// Coordination numbers
+		{pnr: "20180377-2381", valid: true},
+		{pnr: "180377-2381", valid: true},
+		{pnr: "202212782383", valid: true},
+		{pnr: "202212782381", valid: false},
 	}
 
 	for _, tc := range cases {
