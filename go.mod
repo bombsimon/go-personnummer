@@ -1,4 +1,4 @@
-module github.com/bombsimon/go-personnummer/v2
+module github.com/bombsimon/go-personnummer
 
 go 1.17
 
