@@ -1,4 +1,4 @@
-package swessn
+package personnummer
 
 import (
 	"fmt"
