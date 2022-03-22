@@ -45,10 +45,17 @@ const (
 // security number.
 type Person struct {
 	*Parsed
-	Date   time.Time
-	County County
-	Gender Gender
-	Zodiac Zodiac
+	Date           time.Time
+	IsCoordination bool
+	County         County
+	Gender         Gender
+	Zodiac         Zodiac
+}
+
+// GetDay will return the day as a valid date day, meaning it's the parsed
+// personal identity number but witout a potential coordination number.
+func (p *Person) GetDay() int {
+	return p.Day % minCoordinationNumber
 }
 
 // NewPerson parses and returns a pointer to a Person based on the input. If the
@@ -73,7 +80,6 @@ func NewPersonFromParsed(parsed *Parsed) (*Person, error) {
 	}
 
 	if person.Day > minCoordinationNumber {
-		person.Day %= 60
 		person.IsCoordination = true
 	}
 
@@ -126,7 +132,7 @@ func (p *Person) String() string {
 
 	return fmt.Sprintf(
 		"%02d%02d%02d%s%03d%d",
-		p.Year, p.Month, p.Day,
+		p.Year, p.Month, p.GetDay(),
 		p.Divider, p.Serial, cd,
 	)
 }
@@ -153,7 +159,7 @@ func (p *Person) SetCentury() error {
 		"2006-01-02",
 		fmt.Sprintf(
 			"%02d%02d-%02d-%02d",
-			time.Now().Year()/100, p.Year, p.Month, p.Day,
+			time.Now().Year()/100, p.Year, p.Month, p.GetDay(),
 		),
 	)
 
@@ -194,7 +200,7 @@ func (p *Person) SetDate() error {
 			"%d-%02d-%02d",
 			p.Century+p.Year,
 			p.Month,
-			p.Day,
+			p.GetDay(),
 		),
 	)
 
